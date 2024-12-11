@@ -15,58 +15,16 @@ import "../styles/styles.css";
 // import StationInfo from '../components/StationInfo.jsx'; 
 // // Importing the StationInfo component to display details about petrol stations.
 
-// import LocateMe from '../components/LocateMe.jsx'; 
-// // Importing the StationInfo component to display details about petrol stations.
+import LocateMe from '../components/LocateMe.jsx'; 
+// Importing the LocateMe component to display current location of user.
 
 
 export default function Home() {
-  const [location, setLocation] = useState(null);
-  const [error, setError] = useState(null);
-
-  // Function to get the user's location
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (err) => {
-          setError(`Error: ${err.message}`);
-        }
-      );
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
-  };
-
-  // Run this on component mount
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      console.log("Geolocation is available in this browser.");
-      getLocation(); // Call getLocation to fetch the location
-    } else {
-      console.log("Geolocation is NOT available in this browser.");
-      setError("Geolocation is not available in this browser.");
-    }
-  }, []); // Empty dependency array ensures this runs only once
-
-  return (
-    <div>
-      <h1>Welcome to FuelAPP</h1>
-      {location ? (
-        <p>
-          Latitude: {location.latitude} <br />
-          Longitude: {location.longitude}
-        </p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <p>Fetching your location...</p>
-      )}
-    </div>
-  );
-}
+    return (
+      <div>
+        <h1></h1>
+        <LocateMe /> {/* Use the LocateMe component */}
+      </div>
+    );
+  }
 
