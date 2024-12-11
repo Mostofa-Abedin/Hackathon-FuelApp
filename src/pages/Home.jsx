@@ -10,8 +10,8 @@ import LocateMe from '../components/LocateMe.jsx';
 // import Layout from '../components/layout.jsx'; 
 // // Importing the Layout component to provide a consistent page structure with a Navbar and Footer.
 
-// import MapComponent from '../components/MapComponent.jsx'; 
-// // Importing the MapComponent to display an interactive map on the page.
+import MapComponent from '../components/MapComponent.jsx'; 
+// Importing the MapComponent to display an interactive map on the page.
 
 // import SliderComponent from '../components/SliderComponent.jsx'; 
 // // Importing the SliderComponent, which will allow users to adjust the search radius dynamically.
@@ -33,9 +33,9 @@ export default function Home() {
             </div>
 
             {/* Div for MapComponent */}
-            {/* <div className="map-component">
+            <div className="map-component">
                 <MapComponent />
-            </div> */}
+            </div>
 
             {/* Div for SliderComponent */}
             {/* <div className="slider-component">
