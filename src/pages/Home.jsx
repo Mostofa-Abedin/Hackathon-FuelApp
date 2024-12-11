@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react'; 
-// Importing React and the useState hook. React is the core library, and useState manages state within this functional component.
+import React from 'react'; 
+// Importing React to define and render components.
 
-import "../styles/styles.css";
+import "../styles/styles.css"; 
+// Importing the stylesheet for the app.
+
+import LocateMe from '../components/LocateMe.jsx'; 
+// Importing the LocateMe component to display the user's current location.
 
 // import Layout from '../components/layout.jsx'; 
 // // Importing the Layout component to provide a consistent page structure with a Navbar and Footer.
@@ -15,16 +19,33 @@ import "../styles/styles.css";
 // import StationInfo from '../components/StationInfo.jsx'; 
 // // Importing the StationInfo component to display details about petrol stations.
 
-import LocateMe from '../components/LocateMe.jsx'; 
-// Importing the LocateMe component to display current location of user.
-
-
 export default function Home() {
     return (
-      <div>
-        <h1></h1>
-        <LocateMe /> {/* Use the LocateMe component */}
-      </div>
-    );
-  }
+        <div>
+            {/* Div for Layout (Header, Navbar, Footer, etc.) */}
+            {/* <div className="layout">
+                <Layout />
+            </div> */}
 
+            {/* Div for LocateMe Component */}
+            <div className="locate-me">
+                <LocateMe />
+            </div>
+
+            {/* Div for MapComponent */}
+            {/* <div className="map-component">
+                <MapComponent />
+            </div> */}
+
+            {/* Div for SliderComponent */}
+            {/* <div className="slider-component">
+                <SliderComponent />
+            </div> */}
+
+            {/* Div for StationInfo */}
+            {/* <div className="station-info">
+                <StationInfo />
+            </div> */}
+        </div>
+    );
+}
