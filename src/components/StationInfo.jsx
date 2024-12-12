@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React, { useState } from 'react';
 import { useApiRequest } from "../hooks/useApiRequest.jsx"; // Import API Request Hook
 import { useGeolocation } from "../hooks/useGeolocation.jsx"; // Import Geolocation Hook
 
@@ -9,11 +9,19 @@ const StationInfo = () => {
   // Destructure the return values from the API Request Hook
   const { response, loading, error, sendRequest } = useApiRequest();
 
+  // State for selected fuel type
+  const [fuelType, setFuelType] = useState("");
+
+  // Function to handle fuel type selection
+  const handleFuelTypeChange = (event) => {
+    setFuelType(event.target.value); // Update state with selected fuel type
+  };
+
   // Function to handle the API request trigger
   const handleRequest = () => {
-    // Ensure location is available before making the request
-    if (!location) {
-      console.error("Location not available. Cannot make API request.");
+    // Ensure location and fuel type are available before making the request
+    if (!location || !fuelType) {
+      console.error("Location or fuel type not available. Cannot make API request.");
       return;
     }
 
@@ -28,10 +36,10 @@ const StationInfo = () => {
         Authorization: `Bearer ${token}`, // Add token to Authorization header
         Apikey: "MjXGOnT3J4xlFlm8ISa8y9QT3USQOatT", // Dynamic API key
         Transactionid: "7d15f0b3-1ebc-4c1b-90de-3a4b1da2d6c8", // Transaction ID
-        Requesttimestamp: "11/12/2024 10:30:00 AM", 
+        Requesttimestamp: new Date().toISOString(), // Use current timestamp
       },
       body: {
-        fueltype: "P98",
+        fueltype: fuelType, // Use the selected fuel type
         namedlocation: "2216",
         latitude: location.latitude,
         longitude: location.longitude,
@@ -43,12 +51,26 @@ const StationInfo = () => {
 
     sendRequest(config); // Call the hook's function to make the API request
   };
-//-----------------------------------------------------------------Section----------------------------------------------------------//
+  //-----------------------------------------------------------------Section----------------------------------------------------------//
+
   return (
     <div>
       <h1>Station Information</h1>
+
+      {/* Dropdown for selecting fuel type */}
+      <p>
+        <label htmlFor="fuelType">Select Fuel Type:</label>
+        <select id="fuelType" value={fuelType} onChange={handleFuelTypeChange}>
+          <option value="">-- Select Fuel Type --</option>
+          <option value="P95">P95</option>
+          <option value="P98">P98</option>
+          <option value="E10">E10</option>
+          <option value="DL">Diesel</option>
+        </select>
+      </p>
+
       {/* Button to trigger API request */}
-      <button onClick={handleRequest} disabled={!location}>
+      <button onClick={handleRequest} disabled={!location || !fuelType}>
         Fetch Fuel Prices
       </button>
 
