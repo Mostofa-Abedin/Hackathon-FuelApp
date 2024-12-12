@@ -17,6 +17,7 @@ const StationInfo = () => {
       return;
     }
 
+    //-------------------------------Trying to make this section hidden while deployed and perhaps using Neon--------------------
     const token = "KgtGuhGX94FhIyvPPfPMQQlUTpCD"; // Replace with the dynamic token
 
     const config = {
@@ -27,7 +28,7 @@ const StationInfo = () => {
         Authorization: `Bearer ${token}`, // Add token to Authorization header
         Apikey: "MjXGOnT3J4xlFlm8ISa8y9QT3USQOatT", // Dynamic API key
         Transactionid: "7d15f0b3-1ebc-4c1b-90de-3a4b1da2d6c8", // Transaction ID
-        Requesttimestamp: "11/12/2024 10:30:00 AM", // Dynamic timestamp
+        Requesttimestamp: "11/12/2024 10:30:00 AM", 
       },
       body: {
         fueltype: "P98",
@@ -42,7 +43,7 @@ const StationInfo = () => {
 
     sendRequest(config); // Call the hook's function to make the API request
   };
-
+//-----------------------------------------------------------------Section----------------------------------------------------------//
   return (
     <div>
       <h1>Station Information</h1>
