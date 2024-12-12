@@ -2,7 +2,7 @@
 
 ## Intro
 
-AReact-based web application that helps users locate petrol stations within a customizable radius. It uses geolocation and map integration to provide a seamless and user-friendly experience.
+A React-based web application that helps users locate petrol stations within a customizable radius. It uses geolocation and map integration to provide a seamless and user-friendly experience.
 
 ## Features
 

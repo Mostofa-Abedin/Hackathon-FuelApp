@@ -16,8 +16,8 @@ import MapComponent from '../components/MapComponent.jsx';
 // import SliderComponent from '../components/SliderComponent.jsx'; 
 // // Importing the SliderComponent, which will allow users to adjust the search radius dynamically.
 
-// import StationInfo from '../components/StationInfo.jsx'; 
-// // Importing the StationInfo component to display details about petrol stations.
+import StationInfo from '../components/StationInfo.jsx'; 
+// Importing the StationInfo component to display details about petrol stations.
 
 export default function Home() {
     return (
@@ -43,9 +43,9 @@ export default function Home() {
             </div> */}
 
             {/* Div for StationInfo */}
-            {/* <div className="station-info">
+            <div className="station-info">
                 <StationInfo />
-            </div> */}
+            </div>
         </div>
     );
 }

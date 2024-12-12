@@ -4,7 +4,6 @@
     color: green;
 }
 
-/* #map { height: 180px; } */
 
 .locate-me {
     border: 2px solid black;
@@ -12,4 +11,8 @@
 
 .map-component {
     border: 2px solid red;
+}
+
+.station-info {
+    border: 2px solid green;
 }
