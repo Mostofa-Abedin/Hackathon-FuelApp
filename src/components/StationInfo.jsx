@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react'; // Add useContext to the import
 import { useApiRequest } from "../hooks/useApiRequest.jsx"; // Import API Request Hook
 import { useGeolocation } from "../hooks/useGeolocation.jsx"; // Import Geolocation Hook
-import { StationContext } from "../context/StationContext.jsx";
+import { StationContext } from "../context/StationContext.jsx"; // Import StationContext
 
 const StationInfo = () => {
   // Use Geolocation Hook to get location and error
@@ -28,7 +28,7 @@ const StationInfo = () => {
     }
 
     //-------------------------------Trying to make this section hidden while deployed and perhaps using Neon--------------------
-    const token = "KgtGuhGX94FhIyvPPfPMQQlUTpCD"; // Replace with the dynamic token
+    const token = "0x2HEiNgnoVIt5t03HBurgGL8NyZ"; // Replace with the dynamic token
 
     const config = {
       url: "https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices/location", // Endpoint URL
@@ -55,10 +55,24 @@ const StationInfo = () => {
   };
   //-----------------------------------------------------------------Section----------------------------------------------------------//
   // Update context when response is available
-  if (response?.stations) {
-    setStations(response.stations);
-  }
+  // useEffect(() => {
+  //   if (response?.stations) {
+  //     setStations(response.stations);
+  //   }
+  // }, [response, setStations]);
   
+  if (response?.stations && response?.prices) {
+    const mergedStations = response.stations.map((station) => {
+      const priceInfo = response.prices.find((price) => price.stationcode === station.code);
+      return {
+        ...station,
+        price: priceInfo ? priceInfo.price : "N/A",
+      };
+    });
+
+    setStations(mergedStations);
+  }
+
   return (
     <div>
       <h1>Station Information</h1>

@@ -1,12 +1,13 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'; // Importing required components from react-leaflet
-import 'leaflet/dist/leaflet.css'; // Import Leaflet's CSS for proper styling
-import { useGeolocation } from "../hooks/useGeolocation.jsx"; // Import Geolocation Hook
+import React, { useContext } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { useGeolocation } from "../hooks/useGeolocation.jsx";
+import { StationContext } from "../context/StationContext.jsx";
 
 const MapComponent = () => {
-  const { Location, Error } = useGeolocation(); // Destructure Location and Error from the hook
+  const { Location, Error } = useGeolocation();
+  const { stations } = useContext(StationContext);
 
-  // Handle cases where Location is not yet available
   if (!Location) {
     return <p>{Error || "Fetching location..."}</p>;
   }
@@ -14,24 +15,33 @@ const MapComponent = () => {
   return (
     <div>
       <h1>Map Component</h1>
-      {/* Initialize the Leaflet map */}
       <MapContainer
-        center={[Location.latitude, Location.longitude]} // Use latitude and longitude for the center
+        center={[Location.latitude, Location.longitude]}
         zoom={13}
         scrollWheelZoom={true}
-        style={{ height: "400px", width: "100%" }} // Set map dimensions
+        style={{ height: "400px", width: "100%" }}
       >
-        {/* Add map tiles */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* Add a marker */}
         <Marker position={[Location.latitude, Location.longitude]}>
-          <Popup>
-            Your Location: {Location.latitude}, {Location.longitude}
-          </Popup>
+          <Popup>Your Location</Popup>
         </Marker>
+        {stations.map((station, index) => (
+          <Marker
+            key={index}
+            position={[station.location.latitude, station.location.longitude]}
+          >
+            <Popup>
+              <strong>{station.name}</strong>
+              <br />
+              {station.address}
+              <br />
+              Fuel Price: {station.price || "N/A"}
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </div>
   );
