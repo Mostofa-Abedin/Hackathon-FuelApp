@@ -19,7 +19,7 @@ const MapComponent = () => {
         center={[Location.latitude, Location.longitude]}
         zoom={13}
         scrollWheelZoom={true}
-        style={{ height: "400px", width: "100%" }}
+        style={{ height: "280px", width: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

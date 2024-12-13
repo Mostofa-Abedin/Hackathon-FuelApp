@@ -4,10 +4,10 @@ import React from 'react';
 import "../styles/styles.css"; 
 // Importing the stylesheet for the app.
 
+import Credits from "../components/Credits.jsx"; // Footer Component
+
 import LocateMe from '../components/LocateMe.jsx'; 
 // Importing the LocateMe component to display the user's current location.
-
-
 
 // import Layout from '../components/layout.jsx'; 
 // // Importing the Layout component to provide a consistent page structure with a Navbar and Footer.
@@ -23,11 +23,12 @@ import StationInfo from '../components/StationInfo.jsx';
 
 export default function Home() {
     return (
-        <div>
+        <div className="container"> {/* Flexbox container */}
+
             {/* Div for Layout (Header, Navbar, Footer, etc.) */}
-            {/* <div className="layout">
-                <Layout />
-            </div> */}
+            <div className="credits">
+                <Credits />
+            </div>
 
             {/* Div for LocateMe Component */}
             <div className="locate-me">
