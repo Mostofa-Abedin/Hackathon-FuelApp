@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApiRequest } from "../hooks/useApiRequest.jsx"; // Import API Request Hook
 import { useGeolocation } from "../hooks/useGeolocation.jsx"; // Import Geolocation Hook
+import { StationContext } from "../context/StationContext.jsx";
 
 const StationInfo = () => {
   // Use Geolocation Hook to get location and error
@@ -8,7 +9,8 @@ const StationInfo = () => {
 
   // Destructure the return values from the API Request Hook
   const { response, loading, error, sendRequest } = useApiRequest();
-
+  // Access context to update stations
+  const { setStations } = useContext(StationContext); 
   // State for selected fuel type
   const [fuelType, setFuelType] = useState("");
 
@@ -52,7 +54,11 @@ const StationInfo = () => {
     sendRequest(config); // Call the hook's function to make the API request
   };
   //-----------------------------------------------------------------Section----------------------------------------------------------//
-
+  // Update context when response is available
+  if (response?.stations) {
+    setStations(response.stations);
+  }
+  
   return (
     <div>
       <h1>Station Information</h1>
