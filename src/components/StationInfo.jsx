@@ -105,11 +105,13 @@ const StationInfo = () => {
       {response && (
         <div>
           <h2>Stations:</h2>
+          <hr />
           {response.stations.map((station, index) => (
             <div key={index}>
               <p><strong>Name:</strong> {station.name}</p>
               <p><strong>Address:</strong> {station.address}</p>
               <p><strong>Fuel Price:</strong> {response.prices[index]?.price || "N/A"}</p>
+              <hr />
             </div>
           ))}
         </div>

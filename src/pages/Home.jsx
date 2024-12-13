@@ -7,6 +7,8 @@ import "../styles/styles.css";
 import LocateMe from '../components/LocateMe.jsx'; 
 // Importing the LocateMe component to display the user's current location.
 
+
+
 // import Layout from '../components/layout.jsx'; 
 // // Importing the Layout component to provide a consistent page structure with a Navbar and Footer.
 

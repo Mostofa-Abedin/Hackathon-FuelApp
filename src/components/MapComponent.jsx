@@ -39,6 +39,7 @@ const MapComponent = () => {
               {station.address}
               <br />
               Fuel Price: {station.price || "N/A"}
+              <hr />
             </Popup>
           </Marker>
         ))}
