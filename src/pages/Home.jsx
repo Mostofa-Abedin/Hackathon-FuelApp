@@ -13,7 +13,6 @@ import MapComponent from '../components/MapComponent.jsx';
 // Importing the MapComponent to display an interactive map on the page.
 
 
-
 import StationInfo from '../components/StationInfo.jsx'; 
 // Importing the StationInfo component to display details about petrol stations.
 
