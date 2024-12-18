@@ -37,7 +37,7 @@ const StationInfo = () => {
     }
 
     //-------------------------------Trying to make this section hidden while deployed and perhaps using Neon--------------------
-    const token = "QU8L5tNPtLVqOXBijmQd5GWD2BBT"
+    const token = "iz9J3lXH2GXv18E93cO5HIjDG1iA"
     // The token is currently hardcoded but should ideally be securely fetched during deployment.
 
     const config = {
