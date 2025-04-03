@@ -1,0 +1,10 @@
+/* filepath: /home/triggger/Academy_Projects/Hackathon-FuelApp/src/styles/MapComponent.css */
+.map-component {
+  height: 400px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Ensure content stays within the component */
+  position: relative; /* Align with map-container positioning */
+  background-color: #ffffff; /* Light background for better contrast */
+  color: #000000; /* Dark text for readability */
+}

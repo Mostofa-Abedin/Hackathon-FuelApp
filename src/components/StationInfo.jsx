@@ -1,88 +1,105 @@
-import React, { useState, useContext, useEffect } from 'react'; 
-// Import React and necessary hooks for state and context management.
+import React, { useState, useContext, useEffect } from 'react';
+import { useApiRequest } from "../hooks/useApiRequest.jsx";
+import { useGeolocation } from "../hooks/useGeolocation.jsx";
+import { StationContext } from "../context/StationContext.jsx";
+import { mergeStationData } from "../utils/mergeStationData.js";
+import SliderComponent from '../components/SliderComponent.jsx';
+import { toast } from 'react-toastify';
+import LoadingSpinner from '../components/LoadingSpinner.jsx';
+import { getAccessToken } from "../utils/tokenManager.js"; // ✅ only once
 
-import { useApiRequest } from "../hooks/useApiRequest.jsx"; 
-// Custom hook for making API requests.
 
-import { useGeolocation } from "../hooks/useGeolocation.jsx"; 
-// Custom hook to fetch the user's geolocation.
-
-import { StationContext } from "../context/StationContext.jsx"; 
-// Importing the StationContext to share station data globally.
 
 const StationInfo = () => {
-  // Geolocation data and any errors from the useGeolocation hook.
   const { Location: location, Error: geoError } = useGeolocation();
-
-  // API response, loading state, and errors from the custom API request hook.
   const { response, loading, error, sendRequest } = useApiRequest();
+  const { setStations } = useContext(StationContext);
 
-  // Context to store the list of stations globally.
-  const { setStations } = useContext(StationContext); 
+  const [fuelType, setFuelType] = useState("");
+  const [radius, setRadius] = useState(1);
+  const [sortBy, setSortBy] = useState("price");
+  const [sortAscending, setSortAscending] = useState(true);
 
-  // Local state to track the selected fuel type.
-  const [fuelType, setFuelType] = useState(""); 
-
-  // Updates the selected fuel type based on user input.
   const handleFuelTypeChange = (event) => {
-    setFuelType(event.target.value); 
+    setFuelType(event.target.value);
   };
 
-  // Handles the API request to fetch station information.
-  const handleRequest = () => {
-    // Check if location and fuel type are available before proceeding.
+  const handleRadiusChange = (event) => {
+    setRadius(Number(event.target.value));
+  };
+
+  const handleSortByChange = (event) => {
+    setSortBy(event.target.value);
+  };
+
+  const handleSortOrderChange = (event) => {
+    setSortAscending(event.target.checked);
+  };
+
+  const handleRequest = async () => {
     if (!location || !fuelType) {
-      console.error("Location or fuel type not available. Cannot make API request.");
+      toast.error("Please select a fuel type and allow location access.");
       return;
     }
 
-    //-------------------------------Trying to make this section hidden while deployed and perhaps using Neon--------------------
-    const token = "iz9J3lXH2GXv18E93cO5HIjDG1iA"
-    // The token is currently hardcoded but should ideally be securely fetched during deployment.
+    try {
+      const apiKey = import.meta.env.VITE_API_KEY;
+      const authHeader = import.meta.env.VITE_AUTH_HEADER;
+      const token = await getAccessToken();
 
-    const config = {
-      url: "https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices/location",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Authorization: `Bearer ${token}`, // Secure token for authorization.
-        Apikey: "MjXGOnT3J4xlFlm8ISa8y9QT3USQOatT", // API key for the service.
-        Transactionid: "7d15f0b3-1ebc-4c1b-90de-3a4b1da2d6c8", // Unique ID for the request.
-        Requesttimestamp: new Date().toISOString(), // Current timestamp for the request.
-      },
-      body: {
-        fueltype: fuelType, 
-        namedlocation: "2216", 
-        latitude: location.latitude, 
-        longitude: location.longitude, 
-        radius: "1", 
-        sortby: "price", 
-        sortascending: "true", 
-      },
-    };
+      if (!apiKey || !authHeader || !token) {
+        toast.error("API credentials missing or token fetch failed.");
+        return;
+      }
 
-    // Call the API request function with the configured request data.
-    sendRequest(config); 
-  };
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Updates the stations in the context whenever a valid response is received.
-  if (response?.stations && response?.prices) {
-    const mergedStations = response.stations.map((station) => {
-      const priceInfo = response.prices.find((price) => price.stationcode === station.code);
-      return {
-        ...station,
-        price: priceInfo ? priceInfo.price : "N/A",
+      const config = {
+        url: "https://api.onegov.nsw.gov.au/FuelPriceCheck/v1/fuel/prices/location",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${token}`,
+          Apikey: apiKey,
+          Transactionid: "7d15f0b3-1ebc-4c1b-90de-3a4b1da2d6c8",
+          Requesttimestamp: new Date().toISOString(),
+        },
+        body: {
+          fueltype: fuelType,
+          namedlocation: "2216",
+          latitude: location.latitude,
+          longitude: location.longitude,
+          radius: radius.toString(),
+          sortby: sortBy,
+          sortascending: sortAscending.toString(),
+        },
       };
-    });
 
-    setStations(mergedStations); 
-  }
+      sendRequest(config);
+    } catch (error) {
+      toast.error("Error fetching fuel prices.");
+    }
+  };
+
+  useEffect(() => {
+    if (response?.stations && response?.prices) {
+      const merged = mergeStationData(response.stations, response.prices);
+      setStations(merged);
+      toast.success("Fuel stations loaded successfully!");
+    }
+  }, [response, setStations]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`Error: ${error}`);
+    }
+    if (geoError) {
+      toast.error(`Geolocation Error: ${geoError}`);
+    }
+  }, [error, geoError]);
 
   return (
     <div>
       <h1>Station Information</h1>
 
-      {/* Dropdown for selecting fuel type */}
       <p>
         <label htmlFor="fuelType">Select Fuel Type:</label>
         <select id="fuelType" value={fuelType} onChange={handleFuelTypeChange}>
@@ -94,18 +111,40 @@ const StationInfo = () => {
         </select>
       </p>
 
-      {/* Button to fetch fuel prices */}
+      <SliderComponent
+        label="Search Radius (km)"
+        value={radius}
+        onChange={handleRadiusChange}
+        min={1}
+        max={10}
+        step={1}
+      />
+
+      <p>
+        <label htmlFor="sortBy">Sort By:</label>
+        <select id="sortBy" value={sortBy} onChange={handleSortByChange}>
+          <option value="price">Price</option>
+          <option value="distance">Distance</option>
+        </select>
+      </p>
+
+      <p>
+        <label htmlFor="sortAscending">Sort Ascending:</label>
+        <input
+          type="checkbox"
+          id="sortAscending"
+          checked={sortAscending}
+          onChange={handleSortOrderChange}
+        />
+      </p>
+
       <button onClick={handleRequest} disabled={!location || !fuelType}>
         Fetch Fuel Prices
       </button>
 
-      {/* Display loading, error, or geolocation error messages */}
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
-      {geoError && <p>Geolocation Error: {geoError}</p>}
+      {loading && <LoadingSpinner />}
 
-      {/* Show station information if available */}
-      {response && (
+      {response?.stations && (
         <div>
           <h2>Stations:</h2>
           <hr />

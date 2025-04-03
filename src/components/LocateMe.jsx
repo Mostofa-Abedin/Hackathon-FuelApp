@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { useGeolocation } from "../hooks/useGeolocation.jsx";
 // Importing the custom Geolocation Hook to fetch the user's location.
 
+import { motion } from 'framer-motion';
+// Importing motion from framer-motion for animations.
+
 const LocateMe = () => {
   // Destructuring location and error from the geolocation hook.
   const { Location: location, Error: error } = useGeolocation();
@@ -17,7 +20,11 @@ const LocateMe = () => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <h1>Location Component</h1>
       
       {/* Button to trigger location display */}
@@ -44,7 +51,7 @@ const LocateMe = () => {
         // If the user hasn’t clicked "Locate Me" yet, show a prompt.
         <p>Click "Locate Me" to fetch your location.</p>
       )}
-    </div>
+    </motion.div>
   );
 };
 
